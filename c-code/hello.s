@@ -9,7 +9,10 @@ _start:
 
 
 #eax的值是系统调用号，Linux的各种系统调用都是由int $0x80指令引发的，内核需要通过eax判断用户要调哪个系统调用，_exit的系统调用号是1。ebx的值是传给_exit的参数，表示退出状态。_exit系统调用比较特殊，它会终止掉当前进程
+
+
 #gcc -c hello.s  命令生成目标文件(object)hello.o
+
 #shell中:
 #	echo   ———— 打印shell变量的值
 #	$?     ———— 上一指令
@@ -43,6 +46,17 @@ loop_exit:
 	int $0x80  //system call 中断
 */
 
+
+
+
+/*push $ebp	//push压栈 把ebp的值压栈，同时esp-8
+call   80483aa <foo>	//call的下一条指令的地址压栈，同时esp-8,跳转到80483aa的虚拟地址(foo()函数所在)，并修改eip
+sub a,b 	//b=b-a ; 同时esp-8
+pop $ebp 	//出栈 ebp=上一栈底ebp
+leave 		//esp=ebp,ebp=上一栈底ebp(pop $ebp)
+ret  		//结束当前函数,返回之前call点(pop $eip)
+
+*/
 
 
 
