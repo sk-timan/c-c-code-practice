@@ -3499,26 +3499,67 @@ int main(void)
 */
 
 
-/*gcc main.c -g       //源码级调试，在可执行文件中加入源代码的信息，objdump反汇编时可以把C代码和汇编代码穿插起来显示;
-gcc main.c -S（大写） //生成main.s,可直接打开
-objdump -dS a.out   //反汇编
 
 
-gdb:
-	disassemble;    //反汇编当前函数；
+/*#include <stdio.h>
 
-	si;		//单指令调试；（step为单行调试）
-	i registers	//显示所有寄存器的当前值
-	p $rax 		//打印当前rax
-	x/20 $rsp	//从rsp首地址开始，打印20个32数
+int foo();	//汇编时，无地址
+int bar();
+
+int main(void)
+{
+	printf("%d\n",foo(2,3,4));	//汇编时，读取前两位数作为函数变量；多出的后一位记录到edx,根据记录显示，后面edx被重置。
+	return 0;
+}
+
+int foo(int a, int b)
+{
+	return bar(a);		//汇编时，少一位，由esi来代替
+}
+
+int bar(int c, int d)
+{
+	int e= c + d;
+	return e;
+}
 */
+
+
+
+/*#include <stdio.h>
+
+int main(void)
+{
+	void foo(double); 	//汇编时，无地址
+	char c = 60;
+	foo(c);
+	return 0;
+}
+
+void foo(double d)
+{
+	printf("%f\n",d);
+}
+*/
+
+#include <stdio.h>
+
+const int A = 10; 	//只读，在定义时必须初始化，一旦定义之后就不能再改写了
+int a = 20;
+static int b = 30;	//静态，表示这个函数名符号是LOCAL的,用它修饰的文件作用域的变量或函数具有Internal Linkage(内部链接)；在程序开始执行时分配和初始化一次，此后便一直存在直到程序结束。这种变量通常位于.rodata，.data或.bss段
+int c;
+
+int main(void)
+{
+	static int a = 40;
+	char b[] = "Hello world";	 //链接属性为无链接并且没有被static修饰的变量,进入块作用域时在栈上或寄存器中分配，在退出块作用域时释放，下同
+	register int c = 50;	//指示编译器尽可能分配一个寄存器来存储这个变量
 	
-//x86平台上这个栈是从高地址向低地址增长的
-//esp指向当前整个栈的栈顶，ebp指向当前帧的帧底
-//一个内存单元对应四个内存地址；相当于一条信息
-//一个内存地址包含一个字节（32位）；
-//一个栈帧包含一个或几个内存单元(存在无信息单元)；但栈帧的大小都一样(16byte)
-//一个函数对应一个栈帧；
+	//A=20;
+	printf("Hello world %d\n",c);  
+	
+	return 0;
+}
 
 
 
