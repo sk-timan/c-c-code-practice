@@ -1330,7 +1330,7 @@ int main(void)
 
 /*#include <stdio.h>
 
-int a[5]={1,2,3,4,5};        //初始声明变量一定要排在前面，为后续函数提供解读；
+int a[5]={1,2,3,4,5};        //初始声明全局变量一定要排在前面，为后续函数提供解读；
 int b[4]={4,6,7};
 
 int n=sizeof(a)/sizeof(a[0]);   //长整形可直接定义为整形
@@ -3542,7 +3542,7 @@ void foo(double d)
 }
 */
 
-#include <stdio.h>
+/*#include <stdio.h>
 
 const int A = 10; 	//只读，在定义时必须初始化，一旦定义之后就不能再改写了
 int a = 20;
@@ -3560,18 +3560,114 @@ int main(void)
 	
 	return 0;
 }
+*/
 
 
 
-		
-		
-		
+/*#include <stdio.h>
+
+int main(int argc, char** argv)
+{
+	struct {
+		char a;   	//1 byte  
+		short b;	//2 byte
+		int c;		//4 byte
+		char d;		
+	}s;
+	s.a=1;
+	s.b=2;
+	s.c=3;
+	s.d=4;
+	printf("%lu\n",sizeof(s)); 	//lu长无符号数，sizeof计算总字节数，其值是size_t类型的，是某种无符号整型
+
+	return 0;
+}
+*/
+
+
+
+/*#include <stdio.h>
+
+
+typedef struct {
+		unsigned int one:1;	//后面的数字是几就表示它占多少个bit(位)
+		unsigned int two:3;
+		unsigned int three:10;
+		unsigned int four:5;
+		unsigned int :2;
+		unsigned int five:8;
+		unsigned int six:8;
+		//unsigned int seven:30;
+}demo_type;
+
+int main(void)
+{
+	demo_type s={1,5,513,17,129,0x81};
+	//demo_type s={1,5,513,17,129,0x81,1};
+	printf("sizeof demo_type = %lu\n",sizeof(demo_type));
+	printf("values: s=%u,%u,%u,%u,%u,%u\n",s.one, s.two, s.three, s.four, s.five, s.six);
 	
+	return 0;
+}
+*/
+		
+		
+/*#include <stdio.h>
+
+typedef union{                                       //共用体，几种不同数据类型的变量存放在同一块内存里，结构与结构体(struct)类似，节省空间
+	struct{
+		unsigned int one:1;
+		unsigned int two:3;
+		unsigned int three:10;
+		unsigned int four:5;
+		unsigned int :2;
+		unsigned int five:8;
+		unsigned int six:8;
+	}bitfield;
+	unsigned char byte[8];		//按最长的那个变量所需要的位数来开辟内存
+}demo_type;
+	
+int main(void)		
+{
+	demo_type u = {{1,5,513,17,129,0x81}};
+	printf("sizeof demo_type = %lu\n",sizeof(demo_type));
+	printf("values: u=%u,%u,%u,%u,%u,%u\n",
+		u.bitfield.one, u.bitfield.two, u.bitfield.three,
+		u.bitfield.four, u.bitfield.five, u.bitfield.six);
+	printf("hex dump of u:%x %x %x %x %x %x %x %x \n",
+		u.byte[0],u.byte[1],u.byte[2],u.byte[3],
+		u.byte[4],u.byte[5],u.byte[6],u.byte[7]);
+	
+	return 0;
+}
+*/
 
 
+/*#include <stdio.h>
 
+union{int number; char s;}test;
 
+_Bool testBigEndin()
+{
+	test.number = 0x0112;		//四个字节保存该数
+	//test.number = 0x1201;
+	return (test.s == 0x12);	//操作系统在访问内存数据时是从低地址向高地址的顺序进行的，char是一个byte，只会取第一个低地址字节
+}
 
+int main(void)
+{
+	if (testBigEndin()){
+		printf("小端序\n");		//低字节(权重低)存储于低位(低地址)
+		printf("%d\n",test.s);
+	}
+	else{
+		printf("大端序\n");	
+		printf("%d\n",test.s);
+	}
+	
+	return 0;
+}
+*/
 
 
 
