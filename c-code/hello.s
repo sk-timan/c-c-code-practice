@@ -59,6 +59,8 @@ leave 		//esp=ebp,ebp=上一栈底ebp(pop $ebp)
 ret  		//结束当前函数,返回之前call点(pop $eip)
 nopw    0x0(%rax,%rax,1) //空操作，用于维持周期稳定
 lea	0xd4(%rip),%rdi 	//提取地址写到rdi
+%al 			//al寄存器正是eax寄存器的低字节,表示低8位
+not    %eax		//把eax的值取反
 
 */
 

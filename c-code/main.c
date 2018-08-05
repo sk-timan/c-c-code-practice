@@ -2691,7 +2691,7 @@ int main(void)
 	push('c');
 
 	while (! is_empty()){
-		putchar(pop());    //输出一个字符
+		putchar(pop());    //打印一个字符
 	}
 	putchar('\n');
 	return 0;
@@ -3668,6 +3668,129 @@ int main(void)
 	return 0;
 }
 */
+
+
+/*volatile unsigned char recv;		//volatile限定符修饰变量,每次读这个变量仍然要老老实实从内存读取，每次写这个变量也仍然要老老实实写回内存
+volatile unsigned char send;	//除了设备寄存器需要用volatile限定之外，当一个全局变量被同一进程中的多个控制流程访问时也要用volatile限定，比如信号处理函数和多线程。
+
+unsigned char buf[3];
+
+int main(void)
+{
+	buf[0] = recv;
+	buf[1] = recv;
+	buf[2] = recv;
+
+	send = ~buf[0];
+	send = ~buf[1];
+	send = ~buf[2];
+
+	return 0;
+}
+*/
+
+/*#include <stdio.h>
+
+int a,b = 1;
+
+int main(void)
+{
+	push('a');
+	push('b');
+	push('c');
+
+	while(!is_empty()){
+		putchar(pop());
+	}
+	putchar('\n');
+
+	return 0;
+}
+*/
+
+/*#include <stdio.h>
+
+extern void push(char); 	//Previous Linkage 声明(与前一次声明(push)具有相同的标识符名,第一次声明则具有External Linkage)，在多个文件中表示同一个地址，extern可省略
+extern char pop(void);		//static与其相对，表示Internal Linkage
+extern int is_empty(void);
+
+int main(void)
+{
+	push('a');
+	push('b');
+	push('c');
+
+	while(!is_empty()){
+		putchar(pop());
+	}
+	putchar('\n');
+
+	return 0;
+}
+*/
+
+/*#include <stdio.h>
+
+void push(char);
+char pop(void);
+int is_empty(void);
+extern int top; 	//变量声明需加 extern;
+			//函数和变量声明也可以写在main函数体里面，使所声明的标识符具有块作用域
+
+int main(void)
+{
+	push('a');
+	push('b');
+	push('c');
+	printf("%d\n",top);
+
+	while(!is_empty){
+		putchar(pop());
+	}
+	putchar('\n');
+	printf("%d\n",top);
+
+	return 0;
+}
+*/
+
+/*#include <stdio.h>
+#include "stack.h"		//#include "stack/stack.h"   main.c路径下的绝对路径
+
+int main(void)
+{
+	push('a');
+	push('b');
+	push('c');
+
+	while(!is_empty()){
+		putchar(pop());
+	}
+	putchar('\n');
+
+	return 0;
+}
+*/
+
+
+#include <stdio.h>
+#include "stack.h"
+
+int main(void)
+{
+	push('a');
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
