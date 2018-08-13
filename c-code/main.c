@@ -943,7 +943,7 @@ void main(void)
 
 int main (void)
 {
-	struct complex_struct{double x,y;} z;//struct+访问名+{函数体和成员}+访问变量名；
+	struct complex_struct{double x,y;} z;//struct+结构名+{函数体和成员}+访问变量名；
 	double x=3.0;
 	z.x=x;
 	z.y=-4.0;
@@ -3453,7 +3453,7 @@ int main(void)
 	printf("%ld\n",sizeof a/sizeof(int));  //sizeof a/sizeof a[0]  +类型需打括号
 	char array_t[11]={"hello world"};
 	printf("%s\n",array_t);
-	typedef char array_t2[11];
+	typedef char array_t2[11];	//typedef 为类型取一个新的名字，在这个类型定义之后，标识符(array_t2)可作为类型(char)的缩写
 	array_t2 b={"hello world"};  //多重类型定义会引发定义错误
 	printf("%s\n",b);
 	int c=0;
@@ -3773,7 +3773,7 @@ int main(void)
 */
 
 
-#include <stdio.h>
+/*#include <stdio.h>
 #include "stack.h"
 
 int main(void)
@@ -3781,13 +3781,81 @@ int main(void)
 	push('a');
 	return 0;
 }
+*/
 
 
 
 
+#include <stdio.h>
+#include "main.h"
+#include "stack.h"
+#include "maze.h"
 
 
 
+struct point predecessor[MAX_ROW][MAX_COL]={
+	{{-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}},
+	{{-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}},
+	{{-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}},
+	{{-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}},
+	{{-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}},
+};
+
+
+void visit(int row, int col, struct point pre)
+{
+	struct point visit_point = {row, col};
+	maze[row][col] = 2;
+	predecessor[row][col]=pre;
+	push(visit_point);
+}
+
+
+int main(void)
+{
+	struct point p = {0,0};
+	maze[p.row][p.col] = 2;
+	push(p);
+	
+	while (!is_empty){
+		p = pop();
+
+		if (p.row == MAX_ROW - 1  /* goal */
+		    && p.col == MAX_COL - 1)
+			break;
+		if (p.col+1 < MAX_COL     /* right */
+		    && maze[p.row][p.col+1] == 0)
+			visit(p.row, p.col+1, p);
+		if (p.row+1 < MAX_ROW     /* down */
+		    && maze[p.row+1][p.col] == 0)
+			visit(p.row+1, p.col, p);
+		if (p.col-1 >= 0          /* left */
+		    && maze[p.row][p.col-1] == 0)
+			visit(p.row, p.col-1, p);
+		if (p.row-1 >= 0          /* up */
+		    && maze[p.row-1][p.col] == 0)
+			visit(p.row-1, p.col, p);
+		print_maze();
+	}
+	
+	if (p.row == MAX_ROW - 1 && p.col == MAX_COL - 1){
+		printf("(%d,%d)\n", p.row, p.col);
+		while (predecessor[p.row][p.col].row != -1){
+			p = predecessor[p.row][p.col];
+			printf("(%d, %d)\n", p.row, p.col);
+		}
+	}
+	else{
+		printf("No path!\n");
+	}
+	
+	return 0;
+}
+
+
+
+
+ 
 
 
 

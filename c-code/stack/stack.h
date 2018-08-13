@@ -1,4 +1,4 @@
-#ifndef STACK_H
+#ifndef STACK_H		
 #define STACK_H
 extern void push(char);
 extern char pop(void);
